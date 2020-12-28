@@ -1,6 +1,6 @@
 import { Arg, Mutation, Query, Resolver } from "type-graphql";
 import { Users } from "../entity/Users";
-import { hashSync, compareSync } from "bcryptjs";
+import { encrypt, verify } from "unixcrypt";
 @Resolver()
 export class UserResolver {
   @Query(() => [Users])
@@ -8,7 +8,7 @@ export class UserResolver {
     return Users.find({});
   }
   @Mutation(() => Users)
-  createUser(
+  async createUser(
     @Arg("name") name: string,
     @Arg("email") email: string,
     @Arg("password") password: string,
@@ -16,7 +16,8 @@ export class UserResolver {
     @Arg("emailActivated") emailActivated: boolean,
     @Arg("smsActivated") smsActivated: boolean
   ) {
-    const HashedCrypt = hashSync(password, process.env.SALT);
+    // const HashedCrypt = hashSync(password, process.env.SALT);
+    const HashedCrypt = await encrypt(password, "$5");
     console.log(HashedCrypt);
     return Users.create({
       email,
@@ -27,11 +28,12 @@ export class UserResolver {
       smsActivated,
     }).save();
   }
+
   @Mutation(() => Boolean)
   async login(@Arg("email") email: string, @Arg("password") password: string) {
     try {
       const user = await Users.findOneOrFail({ where: { email: email } });
-      return compareSync(password, (await user).password);
+      return verify(password, (await user).password);
     } catch (error) {
       return false;
     }

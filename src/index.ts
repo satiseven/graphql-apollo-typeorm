@@ -6,6 +6,7 @@ import "reflect-metadata";
 import { buildSchema } from "type-graphql";
 import { UserResolver } from "./resolvers/UserResolver";
 import { AddressResolver } from "./resolvers/AddressResolver";
+
 config({ path: ".env" });
 // mutation{
 //     createAddress(address:"Millet Cd. Feza Apartmanı No: 24 K: 3 D: 9Yusufpaşa",
