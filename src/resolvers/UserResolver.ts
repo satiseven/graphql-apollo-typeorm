@@ -12,10 +12,12 @@ export class UserResolver {
     @Arg("email") email: string,
     @Arg("role") role: UserRoles,
     @Arg("emailActivated") emailActivated: boolean,
-    @Arg("smsActivated") smsActivated: boolean
+    @Arg("smsActivated") smsActivated: boolean,
+    @Arg("password") password: string
   ) {
     return Users.create({
       email,
+      password,
       name,
       role,
       emailActivated,
