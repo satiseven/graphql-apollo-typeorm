@@ -4,6 +4,9 @@
   "description": "building a simple graphql api server and getting info from mysql database",
   "main": "dist/index.js",
   "scripts": {
+    "start": "node dist/index",
+    "start:dev": "nodemon dist/index",
+    "watch": "tsc -w",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
