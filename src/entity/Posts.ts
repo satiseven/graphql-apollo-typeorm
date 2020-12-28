@@ -1,4 +1,5 @@
 import { ObjectType, Field, Int } from "type-graphql";
+import "reflect-metadata";
 import {
   BaseEntity,
   Column,
@@ -35,7 +36,7 @@ export class Posts extends BaseEntity {
   @Field()
   @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   updatedAt: string;
+
   @ManyToOne(() => Users, (user) => user.posts)
-  @JoinColumn({ name: "userId", referencedColumnName: "id" })
   user: Users;
 }

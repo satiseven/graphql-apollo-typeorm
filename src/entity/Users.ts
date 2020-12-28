@@ -1,8 +1,10 @@
 import { ObjectType, Field, Int } from "type-graphql";
+import "reflect-metadata";
 import {
   BaseEntity,
   Column,
   Entity,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
@@ -39,13 +41,13 @@ export class Users extends BaseEntity {
   @Field()
   @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   updatedAt: string;
-  @Field()
   @OneToMany(() => Address, (address) => address.user)
+  @Field(() => [Address])
   address: [Address];
-  @Field()
   @OneToMany(() => Orders, (order) => order.user)
+  @Field(() => [Orders])
   orders: [Orders];
-  @Field()
   @OneToMany(() => Posts, (post) => post.user)
+  @Field(() => [Posts])
   posts: [Posts];
 }
