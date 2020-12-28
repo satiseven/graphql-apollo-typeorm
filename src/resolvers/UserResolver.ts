@@ -1,5 +1,7 @@
-import { Arg, Int, Mutation, Query, Resolver } from "type-graphql";
+import { Arg, Mutation, Query, Resolver } from "type-graphql";
 import { Users } from "../entity/Users";
+import { hashSync, compareSync } from "bcryptjs";
+
 @Resolver()
 export class UserResolver {
   @Query(() => [Users])
@@ -17,7 +19,7 @@ export class UserResolver {
   ) {
     return Users.create({
       email,
-      password,
+      password: hashSync(password, process.env.SALT),
       name,
       role,
       emailActivated,
