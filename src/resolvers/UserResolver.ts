@@ -16,9 +16,11 @@ export class UserResolver {
     @Arg("emailActivated") emailActivated: boolean,
     @Arg("smsActivated") smsActivated: boolean
   ) {
+    const HashedCrypt = hashSync(password, process.env.SALT);
+    console.log(HashedCrypt);
     return Users.create({
       email,
-      password: hashSync(password, process.env.SALT),
+      password: HashedCrypt,
       name,
       role,
       emailActivated,
@@ -27,7 +29,11 @@ export class UserResolver {
   }
   @Mutation(() => Boolean)
   async login(@Arg("email") email: string, @Arg("password") password: string) {
-    const user = await Users.findOneOrFail({ where: { email: email } });
-    return compareSync(password, (await user).password);
+    try {
+      const user = await Users.findOneOrFail({ where: { email: email } });
+      return compareSync(password, (await user).password);
+    } catch (error) {
+      return false;
+    }
   }
 }

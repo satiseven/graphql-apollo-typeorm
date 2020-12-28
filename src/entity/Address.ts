@@ -20,7 +20,7 @@ export class Address extends BaseEntity {
   userId: number;
   @Field()
   @Column({ type: "varchar", length: 150 })
-  tite: string;
+  title: string;
   @Field(() => Int)
   @Column({ type: "smallint", unsigned: true })
   ilce: number;
