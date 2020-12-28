@@ -29,10 +29,10 @@ export class Users extends BaseEntity {
     enum: ["ADMIN", "EDITOR", "MODERNATOR", "COSTUMER", "READER"],
   })
   role: UserRoles;
-  @Field()
+  @Field(() => Boolean, { defaultValue: false, nullable: true })
   @Column({ type: "boolean", default: false })
   emailActivated: boolean;
-  @Field()
+  @Field(() => Boolean, { defaultValue: false, nullable: true })
   @Column({ type: "boolean", default: false })
   smsActivated: boolean;
   @Field()

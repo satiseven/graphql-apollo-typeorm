@@ -13,7 +13,7 @@ config({ path: ".env" });
   const server = new ApolloServer({
     schema: await buildSchema({ resolvers: [UserResolver] }),
   });
-  app.get("/", (req, res) => {
+  app.get("/", (_, res) => {
     res.end(
       `<a href="http://localhost:${process.env.PORT}${server.graphqlPath}" title="Go to GraphQL" >GraphQL</a>`
     );
