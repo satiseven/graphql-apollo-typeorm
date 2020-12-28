@@ -1,5 +1,14 @@
 import { ObjectType, Field, Int } from "type-graphql";
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from "typeorm";
+import { Address } from "./Address";
+import { Orders } from "./Orders";
+import { Posts } from "./Posts";
 @ObjectType()
 @Entity({ name: "users" })
 export class Users extends BaseEntity {
@@ -18,9 +27,6 @@ export class Users extends BaseEntity {
     enum: ["ADMIN", "EDITOR", "MODERNATOR", "COSTUMER", "READER"],
   })
   role: UserRoles;
-  @Field(() => Boolean)
-  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
-  createdAt: string;
   @Field()
   @Column({ type: "boolean", default: false })
   emailActivated: boolean;
@@ -29,5 +35,17 @@ export class Users extends BaseEntity {
   smsActivated: boolean;
   @Field()
   @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
+  createdAt: string;
+  @Field()
+  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   updatedAt: string;
+  @Field()
+  @OneToMany(() => Address, (address) => address.user)
+  address: [Address];
+  @Field()
+  @OneToMany(() => Orders, (order) => order.user)
+  orders: [Orders];
+  @Field()
+  @OneToMany(() => Posts, (post) => post.user)
+  posts: [Posts];
 }
