@@ -8,10 +8,7 @@ import { UserResolver } from "./resolvers/UserResolver";
 import { AddressResolver } from "./resolvers/AddressResolver";
 
 config({ path: ".env" });
-// mutation{
-//     createAddress(address:"Millet Cd. Feza Apartmanı No: 24 K: 3 D: 9Yusufpaşa",
-//     phone:"5338155684",tc:"99638806504",userId:1,title:"İŞ",ilce:345)
-//   }
+
 (async () => {
   const app = express();
   await createConnections();

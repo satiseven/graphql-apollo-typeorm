@@ -6,7 +6,7 @@ export class AddressResolver {
   async addressList() {
     return Address.find({});
   }
-  @Mutation(() => Boolean)
+  @Mutation(() => Address)
   async createAddress(
     @Arg("title") title: string,
     @Arg("userId") userId: number,
@@ -15,6 +15,6 @@ export class AddressResolver {
     @Arg("phone") phone: string,
     @Arg("address") address: string
   ) {
-    return Address.insert({ address, phone, ilce, title, userId, tc });
+    return Address.create({ address, phone, ilce, title, userId, tc }).save();
   }
 }
