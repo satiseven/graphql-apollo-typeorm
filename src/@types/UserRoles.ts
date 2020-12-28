@@ -1,0 +1,7 @@
+const enum UserRoles {
+  ADMIN = "ADMIN",
+  EDITOR = "EDITOR",
+  MODERNATOR = "MODERNATOR",
+  COSTUMER = "COSTUMER",
+  READER = "READER",
+}
