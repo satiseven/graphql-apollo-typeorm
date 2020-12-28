@@ -8,6 +8,11 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
+/**
+ * @param myparam the paramet for this prom
+ * TODO Should remove this method
+ * !remember that should remove this method
+ */
 import { Users } from "./Users";
 @ObjectType()
 @Entity({ name: "orders" })
