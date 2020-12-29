@@ -44,7 +44,6 @@ export class Orders extends BaseEntity {
   @Field()
   @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   updatedAt: string;
-
   @ManyToOne(() => Users, (user) => user.orders)
   user: Users;
 }
