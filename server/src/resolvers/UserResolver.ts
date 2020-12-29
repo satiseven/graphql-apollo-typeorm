@@ -18,7 +18,6 @@ export class UserResolver {
   ) {
     // const HashedCrypt = hashSync(password, process.env.SALT);
     const HashedCrypt = await encrypt(password, "$5");
-    console.log(HashedCrypt);
     return Users.create({
       email,
       password: HashedCrypt,

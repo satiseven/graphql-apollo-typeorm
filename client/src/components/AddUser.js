@@ -1,6 +1,5 @@
 import { gql, useMutation } from "@apollo/client";
 import React from "react";
-
 const ADD_USER = gql`
   mutation createUser(
     $name: String!
