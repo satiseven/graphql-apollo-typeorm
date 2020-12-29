@@ -1,6 +1,19 @@
-import { Arg, Mutation, Query, Resolver } from "type-graphql";
+import {
+  Arg,
+  Field,
+  Mutation,
+  ObjectType,
+  Query,
+  Resolver,
+} from "type-graphql";
 import { Users } from "../entity/Users";
 import { encrypt, verify } from "unixcrypt";
+import { sign } from "jsonwebtoken";
+@ObjectType()
+class loginResponse {
+  @Field(() => String)
+  accessToken: string;
+}
 @Resolver()
 export class UserResolver {
   @Query(() => [Users])
@@ -28,11 +41,22 @@ export class UserResolver {
     }).save();
   }
 
-  @Mutation(() => Boolean)
-  async login(@Arg("email") email: string, @Arg("password") password: string) {
+  @Mutation(() => loginResponse)
+  async login(
+    @Arg("email") email: string,
+    @Arg("password") password: string
+  ): Promise<loginResponse | boolean> {
     try {
       const user = await Users.findOneOrFail({ where: { email: email } });
-      return verify(password, (await user).password);
+      if (verify(password, (await user).password)) {
+        return {
+          accessToken: sign(
+            { userId: user.id, email: user.email },
+            process.env.SECRET_KEY,
+            { expiresIn: "15m" }
+          ),
+        };
+      }
     } catch (error) {
       return false;
     }

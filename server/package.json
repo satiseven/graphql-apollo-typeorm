@@ -21,6 +21,7 @@
   "homepage": "https://github.com/satiseven/graphql-apollo-typeorm#readme",
   "dependencies": {
     "@types/bcryptjs": "^2.4.2",
+    "@types/jsonwebtoken": "^8.5.0",
     "apollo-server-express": "^2.19.1",
     "bcryptjs": "^2.4.3",
     "class-validator": "^0.12.2",
@@ -29,6 +30,7 @@
     "express": "^4.17.1",
     "express-apollo": "^4.13.7",
     "graphql": "^15.4.0",
+    "jsonwebtoken": "^8.5.1",
     "mysql": "^2.18.1",
     "reflect-metadata": "^0.1.13",
     "type-graphql": "^1.1.1",
