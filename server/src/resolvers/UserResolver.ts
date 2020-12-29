@@ -6,12 +6,14 @@ import {
   ObjectType,
   Query,
   Resolver,
+  UseMiddleware,
 } from "type-graphql";
 import { Users } from "../entity/Users";
 import { encrypt, verify } from "unixcrypt";
 import { sign } from "jsonwebtoken";
 import { MyContext } from "../@types/ContextResReq";
 import { createAccessToken, createRefreshToken } from "../Auth";
+import { isAuth } from "../isAuth";
 @ObjectType()
 class loginResponse {
   @Field(() => String)
@@ -19,6 +21,12 @@ class loginResponse {
 }
 @Resolver()
 export class UserResolver {
+  @Query(() => String)
+  @UseMiddleware(isAuth)
+  mineBy(@Ctx() { payload }: MyContext) {
+    console.log(payload);
+    return `{your user id is ${payload!.userId}}`;
+  }
   @Query(() => [Users])
   getUsers() {
     return Users.find({});
