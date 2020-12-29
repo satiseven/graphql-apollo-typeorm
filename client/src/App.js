@@ -5,7 +5,7 @@ import {
   gql,
   ApolloProvider,
 } from "@apollo/client";
-
+import { AddUser } from "./components/AddUser";
 const client = new ApolloClient({
   uri: "http://localhost:5000/graphql",
   cache: new InMemoryCache(),
@@ -15,6 +15,7 @@ function App() {
     <ApolloProvider client={client}>
       <div className="App">
         <Users />
+        <AddUser />
       </div>
     </ApolloProvider>
   );

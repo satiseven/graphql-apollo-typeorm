@@ -12,6 +12,9 @@ const getUsers = gql`
   }
 `;
 export const Users = (props) => {
+  //   React.useEffect(() => {
+  //     console.log("jjj");
+  //   });
   const { loading, error, data } = useQuery(getUsers);
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
