@@ -1,5 +1,5 @@
 import { config } from "dotenv";
-import { ApolloServer, gql } from "apollo-server-express";
+import { ApolloServer } from "apollo-server-express";
 import { createConnections } from "typeorm";
 import express = require("express");
 import "reflect-metadata";
@@ -11,7 +11,7 @@ config({ path: ".env" });
 
 (async () => {
   const app = express();
-  cors.app.use(cors);
+  cors.apply(app);
   await createConnections();
   const server = new ApolloServer({
     schema: await buildSchema({ resolvers: [UserResolver, AddressResolver] }),
@@ -22,7 +22,6 @@ config({ path: ".env" });
     );
   });
   server.applyMiddleware({ app });
-
   app.listen(process.env.PORT, () => {
     console.warn(`http://localhost:${process.env.PORT}`);
   });
