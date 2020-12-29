@@ -6,11 +6,12 @@ import "reflect-metadata";
 import { buildSchema } from "type-graphql";
 import { UserResolver } from "./resolvers/UserResolver";
 import { AddressResolver } from "./resolvers/AddressResolver";
-
+import cors = require("cors");
 config({ path: ".env" });
 
 (async () => {
   const app = express();
+  cors.app.use(cors);
   await createConnections();
   const server = new ApolloServer({
     schema: await buildSchema({ resolvers: [UserResolver, AddressResolver] }),
