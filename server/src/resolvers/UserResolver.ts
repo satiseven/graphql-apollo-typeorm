@@ -11,6 +11,7 @@ import { Users } from "../entity/Users";
 import { encrypt, verify } from "unixcrypt";
 import { sign } from "jsonwebtoken";
 import { MyContext } from "../@types/ContextResReq";
+import { createAccessToken, createRefreshToken } from "../Auth";
 @ObjectType()
 class loginResponse {
   @Field(() => String)
@@ -52,26 +53,18 @@ export class UserResolver {
     try {
       const user = await Users.findOneOrFail({ where: { email: email } });
       if (verify(password, (await user).password)) {
-        res.cookie(
-          "jid",
-          sign({ userId: user.id, email: user.email }, process.env.SECRET_KEY, {
-            expiresIn: "7d",
-          }),
-          {
-            httpOnly: true,
-          }
-        );
+        res.cookie("apollo", createRefreshToken(user), {
+          httpOnly: true,
+        });
 
         return {
-          accessToken: sign(
-            { userId: user.id, email: user.email },
-            process.env.SECRET_KEY,
-            { expiresIn: "15m" }
-          ),
+          accessToken: createAccessToken(user),
         };
+      } else {
+        throw "can not find user";
       }
     } catch (error) {
-      return false;
+      throw "can not find user";
     }
   }
 }
