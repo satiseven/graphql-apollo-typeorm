@@ -18,7 +18,7 @@ config({ path: ".env" });
     schema: await buildSchema({ resolvers: [UserResolver, AddressResolver] }),
     context: ({ req, res }) => ({ req, res }),
   });
-
+  app.post("refresh_token", () => {});
   app.get("/", (_, res) => {
     // res.cookie(
     //   "jid",

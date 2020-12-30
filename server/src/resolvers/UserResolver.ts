@@ -13,7 +13,7 @@ import { encrypt, verify } from "unixcrypt";
 import { sign } from "jsonwebtoken";
 import { MyContext } from "../@types/ContextResReq";
 import { createAccessToken, createRefreshToken } from "../Auth";
-import { isAuth } from "../isAuth";
+import { headerAuth } from "../AuthHeader";
 @ObjectType()
 class loginResponse {
   @Field(() => String)
@@ -22,7 +22,16 @@ class loginResponse {
 @Resolver()
 export class UserResolver {
   @Query(() => String)
-  @UseMiddleware(isAuth)
+  @UseMiddleware(({}, next) => {
+    console.log("SAying my middle");
+
+    return next();
+  })
+  sayName() {
+    return "Rizaaaaa";
+  }
+  @Query(() => String)
+  @UseMiddleware(headerAuth)
   mineBy(@Ctx() { payload }: MyContext) {
     console.log(payload);
     return `{your user id is ${payload!.userId}}`;
