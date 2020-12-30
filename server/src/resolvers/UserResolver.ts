@@ -25,6 +25,11 @@ export class UserResolver {
   getUsers() {
     return Users.find({});
   }
+    @UseMiddleware(isAuth)
+  mineBy(@Ctx() { payload }: MyContext) {
+    console.log(payload);
+    return `{your user id is ${payload!.userId}}`;
+  }
   @Query(() => String)
   @UseMiddleware(ResolveTime)
   echoUser() {
