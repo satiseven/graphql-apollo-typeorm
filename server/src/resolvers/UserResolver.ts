@@ -6,12 +6,14 @@ import {
   ObjectType,
   Query,
   Resolver,
+  UseMiddleware,
 } from "type-graphql";
 import { Users } from "../entity/Users";
 import { encrypt, verify } from "unixcrypt";
 import { sign } from "jsonwebtoken";
 import { MyContext } from "../@types/ContextResReq";
 import { createAccessToken, createRefreshToken } from "../Auth";
+import { ResolveTime } from "../isAuth";
 @ObjectType()
 class loginResponse {
   @Field(() => String)
@@ -22,6 +24,11 @@ export class UserResolver {
   @Query(() => [Users])
   getUsers() {
     return Users.find({});
+  }
+  @Query(() => String)
+  @UseMiddleware(ResolveTime)
+  echoUser() {
+    return "asdfasdfasdf";
   }
   @Mutation(() => Users)
   async createUser(
@@ -64,7 +71,9 @@ export class UserResolver {
         throw "can not find user";
       }
     } catch (error) {
-      throw "can not find user";
+      console.log(error);
+
+      throw "error Occur";
     }
   }
 }
