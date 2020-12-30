@@ -8,7 +8,6 @@ import { UserResolver } from "./resolvers/UserResolver";
 import { AddressResolver } from "./resolvers/AddressResolver";
 import cors = require("cors");
 config({ path: ".env" });
-
 (async () => {
   const app = express();
   cors.apply(app);
