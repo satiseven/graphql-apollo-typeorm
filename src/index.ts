@@ -9,6 +9,7 @@ import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
 import { helloResolver } from "./resolvers/hello";
 import { PostResolver } from "./resolvers/PostResolver";
+import { UserResolver } from "./resolvers/UserResolver";
 
 config({ path: ".env" });
 
@@ -18,7 +19,7 @@ config({ path: ".env" });
   const app = express();
   const server = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [helloResolver, PostResolver],
+      resolvers: [UserResolver, PostResolver],
       validate: false,
     }),
     context: () => ({ em: orm.em }),
