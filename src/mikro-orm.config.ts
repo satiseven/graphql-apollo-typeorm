@@ -13,5 +13,6 @@ export default {
   port: 5432,
   migrations: {
     path: path.join(__dirname, "./migrations"),
+    pattern: /^[\w-]+\d+\.[tj]s/,
   },
 } as Parameters<typeof MikroORM.init>[0];
