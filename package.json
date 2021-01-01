@@ -40,6 +40,7 @@
     "mysql": "^2.18.1",
     "pg": "^8.5.1",
     "postgres": "^1.0.2",
+    "reflect-metadata": "^0.1.13",
     "type-graphql": "^1.1.1"
   },
   "mikro-orm": {
