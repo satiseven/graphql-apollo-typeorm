@@ -1,0 +1,19 @@
+{
+  "name": "fullstackjavascript",
+  "version": "1.0.0",
+  "description": "This is a Javascript FullStack development (apollo typescritp graphql-nodejs-postgress)",
+  "main": "dist/index",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/satiseven/graphql-apollo-typeorm.git"
+  },
+  "author": "Riza Gulizade",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/satiseven/graphql-apollo-typeorm/issues"
+  },
+  "homepage": "https://github.com/satiseven/graphql-apollo-typeorm#readme"
+}
