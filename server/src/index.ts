@@ -22,7 +22,11 @@ config({ path: ".env" });
   const PORT = process.env.PORT || 5000;
   const app = express();
   const redisStore = connectRedis(session);
-  const redisClient = redis.createClient();
+  const redisClient = redis.createClient({
+    host: process.env.REDIS_HOST,
+    port: 25061,
+    password: process.env.REDIS_PASSWORD,
+  });
   app.use(
     session({
       name: "qssid",
@@ -34,7 +38,7 @@ config({ path: ".env" });
       },
       secret: "keyboard cat",
       resave: false,
-      //saveUninitialized: true,
+      saveUninitialized: true,
     })
   );
   redisClient.on("error", function (err) {});
