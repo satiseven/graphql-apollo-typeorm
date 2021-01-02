@@ -13,6 +13,7 @@ import { UserResolver } from "./resolvers/UserResolver";
 import connectRedis from "connect-redis";
 import redis from "redis";
 import session from "express-session";
+import { MyContext } from "./@types/MyContextTypes";
 
 config({ path: ".env" });
 
@@ -24,24 +25,35 @@ config({ path: ".env" });
   const redisClient = redis.createClient();
   app.use(
     session({
-      name: "qid",
-      store: new redisStore({ client: redisClient }),
+      name: "qssid",
+      store: new redisStore({ client: redisClient, disableTouch: true }),
+      cookie: {
+        maxAge: 1000 * 60 * 60 * 24,
+        httpOnly: true,
+        sameSite: "lax",
+      },
       secret: "keyboard cat",
       resave: false,
+      //saveUninitialized: true,
     })
   );
+  redisClient.on("error", function (err) {});
+
   const server = new ApolloServer({
     schema: await buildSchema({
       resolvers: [UserResolver, PostResolver],
       validate: false,
     }),
-    context: () => ({ em: orm.em }),
+    context: ({ req, res }): MyContext => ({ em: orm.em, req, res }),
+  });
+
+  app.get("/", (req, res) => {
+    console.log(req.session);
+
+    res.end("<a href='http://localhost:5000/graphql' >graphql </a>");
   });
   app.listen(PORT, () => {
     console.log(`http://localhost:${PORT}`);
-  });
-  app.get("/", (_, res) => {
-    res.end("<a href='http://localhost:5000/graphql' >graphql </a>");
   });
   server.applyMiddleware({ app });
   //   const post = orm.em.create(Posts, { title: "First One" });
