@@ -30,7 +30,7 @@ class FieldError {
 }
 @ObjectType()
 class UserResponse {
-  @Field(() => FieldError, { nullable: true })
+  @Field(() => [FieldError], { nullable: true })
   errors?: FieldError[];
   @Field(() => User, { nullable: true })
   user?: User;
@@ -80,17 +80,42 @@ export class UserResolver {
       user,
     };
   }
-  @Mutation(() => User)
+  @Mutation(() => UserResponse)
   async register(
     @Arg("options", () => UsernamePasswordInput) options: UsernamePasswordInput,
     @Ctx() { em }: MyContext
-  ): Promise<User> {
+  ): Promise<UserResponse> {
+    if (options.email.length < 5 || options.password.length < 7) {
+      return {
+        errors: [
+          {
+            field: "email",
+            message: "Please Control Email > 5 and Pasword Length < 7",
+          },
+        ],
+      };
+    }
     const user = em.create(User, {
       email: options.email,
       password: await hash(options.password),
     });
-    await em.persistAndFlush(user);
-    return user;
+    try {
+      await em.persistAndFlush(user);
+    } catch (error) {
+      if (error.code === "23505" || error.detail.includes("already exists")) {
+        return {
+          errors: [
+            {
+              field: "user",
+              message: "User is Dublicated",
+            },
+          ],
+        };
+      }
+    }
+    return {
+      user,
+    };
   }
   @Mutation(() => User)
   async updateUser(
