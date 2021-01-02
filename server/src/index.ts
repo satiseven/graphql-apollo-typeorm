@@ -14,19 +14,16 @@ import connectRedis from "connect-redis";
 import redis from "redis";
 import session from "express-session";
 import { MyContext } from "./@types/MyContextTypes";
-
+//import cors from "cors";
 config({ path: ".env" });
 
 (async () => {
   const orm = await MikroORM.init(mikroConfig);
   const PORT = process.env.PORT || 5000;
   const app = express();
+  //app.use(cors);
   const redisStore = connectRedis(session);
-  const redisClient = redis.createClient({
-    host: process.env.REDIS_HOST,
-    port: 25061,
-    password: process.env.REDIS_PASSWORD,
-  });
+  const redisClient = redis.createClient();
   app.use(
     session({
       name: "qssid",
@@ -41,7 +38,9 @@ config({ path: ".env" });
       saveUninitialized: true,
     })
   );
-  redisClient.on("error", function (err) {});
+  redisClient.on("error", function (err) {
+    console.log(err);
+  });
 
   const server = new ApolloServer({
     schema: await buildSchema({
@@ -59,7 +58,7 @@ config({ path: ".env" });
   app.listen(PORT, () => {
     console.log(`http://localhost:${PORT}`);
   });
-  server.applyMiddleware({ app });
+  server.applyMiddleware({ app, cors: { origin: "*" } });
   //   const post = orm.em.create(Posts, { title: "First One" });
   //   await orm.em.persistAndFlush(post);
 })();
