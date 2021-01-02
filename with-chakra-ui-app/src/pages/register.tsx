@@ -13,11 +13,12 @@ import { InputField } from "../components/InputField";
 import { Wrapper } from "../components/Wrapper";
 import { useRegisterMutation } from "../generated/graphql";
 import { toErrorMap } from "../utils/toErrorMap";
-
+import { useRouter } from "next/router";
 interface registerProps {}
 
 const register: React.FC<registerProps> = (props) => {
   const [, register] = useRegisterMutation();
+  const router = useRouter();
   return (
     <Wrapper variant="small">
       <Formik
@@ -27,10 +28,13 @@ const register: React.FC<registerProps> = (props) => {
             email: values.username,
             password: values.password,
           });
+          console.log(response.data?.register.errors);
+
           if (response.data?.register.errors) {
             setErrors(toErrorMap(response.data.register.errors));
           }
-          response.data.register?.user?.id;
+          router.push("/");
+          console.log(response.data.register?.user?.id);
         }}
       >
         {({ isSubmitting }) => (
