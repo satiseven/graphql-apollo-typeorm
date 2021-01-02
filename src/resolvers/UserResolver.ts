@@ -1,16 +1,16 @@
-import { promises } from "fs";
 import { FieldsOnCorrectTypeRule } from "graphql";
 import {
   Resolver,
   Query,
   Field,
+  ObjectType,
   Mutation,
   Int,
   Ctx,
   Arg,
   InputType,
 } from "type-graphql";
-import { hash } from "argon2";
+import { hash, verify } from "argon2";
 
 import { MyContext } from "../@types/MyContextTypes";
 import { User } from "../entities/User";
@@ -21,6 +21,21 @@ class UsernamePasswordInput {
   @Field(() => String)
   password!: string;
 }
+@ObjectType()
+class FieldError {
+  @Field(() => String, { nullable: true })
+  field?: string;
+  @Field(() => String, { nullable: true })
+  message?: string;
+}
+@ObjectType()
+class UserResponse {
+  @Field(() => FieldError, { nullable: true })
+  errors?: FieldError[];
+  @Field(() => User, { nullable: true })
+  user?: User;
+}
+
 @Resolver()
 export class UserResolver {
   @Query(() => [User])
@@ -33,6 +48,37 @@ export class UserResolver {
     @Ctx() { em }: MyContext
   ): Promise<User | null> {
     return em.findOne(User, { id });
+  }
+  @Mutation(() => UserResponse)
+  async login(
+    @Arg("options", () => UsernamePasswordInput) options: UsernamePasswordInput,
+    @Ctx() { em }: MyContext
+  ): Promise<UserResponse> {
+    const user = await em.findOne(User, { email: options.email });
+    if (!user) {
+      return {
+        errors: [
+          {
+            field: "Email",
+            message: "You email is not match with our DB",
+          },
+        ],
+      };
+    }
+    const verified = await verify(user.password, options.password);
+    if (!verified) {
+      return {
+        errors: [
+          {
+            field: "Password",
+            message: "Incorrect Passwrod",
+          },
+        ],
+      };
+    }
+    return {
+      user,
+    };
   }
   @Mutation(() => User)
   async register(
