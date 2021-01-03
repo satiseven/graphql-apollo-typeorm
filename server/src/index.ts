@@ -38,9 +38,9 @@ config({ path: ".env" });
       saveUninitialized: true,
     })
   );
-  redisClient.on("error", function (err) {
-    console.log(err);
-  });
+  // redisClient.on("error", function (err) {
+  //   console.log(err);
+  // });
 
   const server = new ApolloServer({
     schema: await buildSchema({
