@@ -23,7 +23,7 @@ import session from "express-session";
       resave: false,
       cookie: {
         sameSite: "lax",
-        maxAge: 100 * 60 * 60 * 24,
+        maxAge: 1000 * 60 * 60 * 24,
       },
     })
   );

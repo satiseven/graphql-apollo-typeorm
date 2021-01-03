@@ -57,6 +57,7 @@ export class UserResolver {
         username: options.username,
       }).save();
       req.session.userId = user.id;
+      console.log(req.session);
       return {
         user,
       };
@@ -81,6 +82,8 @@ export class UserResolver {
       const user = await User.findOneOrFail({ where: { email } });
       if (await verify(user.password, password)) {
         req.session.userId = user.id;
+        console.log(req.session);
+
         return {
           user,
         };
