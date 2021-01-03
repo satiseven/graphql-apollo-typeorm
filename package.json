@@ -19,6 +19,9 @@
   "description": "Creating Post by Control users session and show them posts",
   "main": "dist/index.js",
   "scripts": {
+    "start": "node dist/index",
+    "dev": "nodemon dist/start",
+    "watch": "tsc -w",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
