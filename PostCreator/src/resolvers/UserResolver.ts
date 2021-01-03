@@ -1,8 +1,9 @@
-import { Arg, Mutation, Query, Resolver } from "type-graphql";
+import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { User } from "../entity/User";
 import { hash, verify } from "argon2";
 import { UserResponse } from "../@types/userResponse";
 import { RegisterArgs } from "./args/RegisterArgs";
+import { ContextResponse } from "../@types/ContextResponse";
 @Resolver()
 export class UserResolver {
   @Query(() => String)
@@ -15,7 +16,8 @@ export class UserResolver {
   }
   @Mutation(() => UserResponse)
   async createUser(
-    @Arg("option", { nullable: false }) options: RegisterArgs
+    @Arg("option", { nullable: false }) options: RegisterArgs,
+    @Ctx() { req }: ContextResponse
   ): Promise<UserResponse> {
     const hashedPassword = await hash(options.password);
     if (options.email.length < 7) {
@@ -54,6 +56,7 @@ export class UserResolver {
         password: hashedPassword,
         username: options.username,
       }).save();
+      req.session.userId = user.id;
       return {
         user,
       };
@@ -71,11 +74,13 @@ export class UserResolver {
   @Mutation(() => UserResponse)
   async loginUser(
     @Arg("email", { nullable: false }) email: string,
-    @Arg("password", { nullable: false }) password: string
+    @Arg("password", { nullable: false }) password: string,
+    @Ctx() { req }: ContextResponse
   ): Promise<UserResponse> {
     try {
       const user = await User.findOneOrFail({ where: { email } });
       if (await verify(user.password, password)) {
+        req.session.userId = user.id;
         return {
           user,
         };
