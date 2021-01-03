@@ -18,10 +18,10 @@ export class User extends BaseEntity {
   @PrimaryGeneratedColumn({ type: "int", unsigned: true })
   id: number;
   @Field(() => String)
-  @Column({ type: "char", length: 150 })
+  @Column({ type: "char", length: 150, unique: true })
   username: string;
   @Field(() => String)
-  @Column({ type: "char", length: 150 })
+  @Column({ type: "char", length: 150, unique: true })
   email: string;
   @Field(() => String)
   @Column({ type: "char", length: 150 })
