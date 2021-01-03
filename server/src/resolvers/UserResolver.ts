@@ -58,6 +58,26 @@ export class UserResolver {
     @Arg("options", () => UsernamePasswordInput) options: UsernamePasswordInput,
     @Ctx() { em, req }: MyContext
   ): Promise<UserResponse> {
+    if (options.email.length < 5) {
+      return {
+        errors: [
+          {
+            field: "email",
+            message: "Please Control Email > 5  ",
+          },
+        ],
+      };
+    }
+    if (options.password.length < 7) {
+      return {
+        errors: [
+          {
+            field: "password",
+            message: "Please Control Pasword Length < 7",
+          },
+        ],
+      };
+    }
     const user = await em.findOne(User, { email: options.email });
     if (!user) {
       return {
