@@ -91,12 +91,22 @@ export class UserResolver {
     @Arg("options", () => UsernamePasswordInput) options: UsernamePasswordInput,
     @Ctx() { em }: MyContext
   ): Promise<UserResponse> {
-    if (options.email.length < 5 || options.password.length < 7) {
+    if (options.email.length < 5) {
       return {
         errors: [
           {
             field: "email",
-            message: "Please Control Email > 5 and Pasword Length < 7",
+            message: "Please Control Email > 5  ",
+          },
+        ],
+      };
+    }
+    if (options.password.length < 7) {
+      return {
+        errors: [
+          {
+            field: "password",
+            message: "Please Control Pasword Length < 7",
           },
         ],
       };

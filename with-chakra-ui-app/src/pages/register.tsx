@@ -22,28 +22,26 @@ const register: React.FC<registerProps> = (props) => {
   return (
     <Wrapper variant="small">
       <Formik
-        initialValues={{ username: "", password: "" }}
+        initialValues={{ email: "", password: "" }}
         onSubmit={async (values, { setErrors }) => {
           const response = await register({
-            email: values.username,
+            email: values.email,
             password: values.password,
           });
-          console.log(response.data?.register.errors);
+          // console.log(response.data?.register.errors);
 
           if (response.data?.register.errors) {
-            setErrors(toErrorMap(response.data.register.errors));
+            console.log("yes");
+
+            return setErrors(toErrorMap(response.data.register.errors));
           }
           router.push("/");
-          console.log(response.data.register?.user?.id);
+          //console.log(response.data.register?.user?.id);
         }}
       >
         {({ isSubmitting }) => (
           <Form>
-            <InputField
-              name="username"
-              placeholder="Username"
-              label="Username"
-            />
+            <InputField name="email" placeholder="Username" label="Username" />
 
             <InputField
               name="password"
