@@ -9,6 +9,10 @@ export class UserResolver {
   hey() {
     return "gey";
   }
+  @Query(() => [User])
+  async Users() {
+    return await User.find({});
+  }
   @Mutation(() => UserResponse)
   async createUser(
     @Arg("option", { nullable: false }) options: RegisterArgs

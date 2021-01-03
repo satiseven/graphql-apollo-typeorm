@@ -2,6 +2,7 @@ import "reflect-metadata";
 
 import { Field, Int, ObjectType } from "type-graphql";
 import {
+  BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
@@ -12,7 +13,7 @@ import {
 import { User } from "./User";
 @ObjectType()
 @Entity({ name: "posts" })
-export class Post {
+export class Post extends BaseEntity {
   @Field(() => Int)
   @PrimaryGeneratedColumn({ type: "int", unsigned: true })
   id: number;

@@ -5,13 +5,13 @@ import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
 import { createConnection } from "typeorm";
 import { UserResolver } from "./resolvers/UserResolver";
-
+import { PostResolver } from "./resolvers/PostResolver";
 (async () => {
   const PORT = process.env.PORT || 5000;
   const app = express();
   const DB = await createConnection();
   const graphqlServer = new ApolloServer({
-    schema: await buildSchema({ resolvers: [UserResolver] }),
+    schema: await buildSchema({ resolvers: [UserResolver, PostResolver] }),
   });
 
   graphqlServer.applyMiddleware({ app });
