@@ -7,32 +7,20 @@ import { createConnection } from "typeorm";
 import { UserResolver } from "./resolvers/UserResolver";
 import { PostResolver } from "./resolvers/PostResolver";
 import { ContextResponse } from "./@types/ContextResponse";
-import morgan from "morgan";
-import { createStream } from "rotating-file-stream";
+
 import Redis from "ioredis";
 import session from "express-session";
-import { environment } from "./configuration/environment";
+import { logger } from "./helpers/logger";
 let RedisStore = require("connect-redis")(session);
 (async () => {
   const PORT = process.env.PORT || 5000;
   const redis = new Redis();
   const app = express();
-  const accessLogStream = createStream(environment.requestLogFile, {
-    interval: environment.requestLogRollingInterval,
-    path: environment.logDir,
-  });
-  const consoleAppender = morgan(environment.requestLogFormat);
-  const fileAppender = morgan(environment.requestLogFormat, {
-    stream: accessLogStream,
-  });
-  app.use(consoleAppender);
-
   const DB = await createConnection();
   const graphqlServer = new ApolloServer({
     schema: await buildSchema({ resolvers: [UserResolver, PostResolver] }),
     context: ({ req, res }): ContextResponse => ({ req, res }),
   });
-
   app.use(
     session({
       secret: "thisisasecretkey",

@@ -13,7 +13,7 @@ import "reflect-metadata";
 import { Post } from "../entity/Post";
 import { isAuth } from "../middlewares/isAuth";
 import { MyContext } from "../@types/MyContext";
-import session from "express-session";
+
 @Resolver()
 export class PostResolver {
   @Query(() => String)
