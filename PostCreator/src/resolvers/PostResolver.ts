@@ -51,7 +51,7 @@ export class PostResolver {
         text: "Selam Dunya",
         html: "<h1>Yeni Bir Yazi Girildi</h1>",
       };
-      SendMail(mail);
+      //SendMail(mail);
       return post;
     } catch (error) {
       return false;

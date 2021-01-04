@@ -1,7 +1,9 @@
 import nodemailer from "nodemailer";
 import { SendMailOptions } from "nodemailer";
 
-export const SendMail = async (mailOption: SendMailOptions) => {
+export const SendMail = async (
+  mailOption: SendMailOptions
+): Promise<boolean> => {
   console.log("this is mailllll");
   let transporter = nodemailer.createTransport({
     host: process.env.MAIL_HOST,
@@ -12,6 +14,7 @@ export const SendMail = async (mailOption: SendMailOptions) => {
       pass: process.env.MAIL_PASS,
     },
   });
+
   let info = await transporter.sendMail({
     from: mailOption.from,
     to: mailOption.to,
@@ -19,7 +22,7 @@ export const SendMail = async (mailOption: SendMailOptions) => {
     text: mailOption.text,
     html: mailOption.html,
   });
-
+  return true;
   //console.log("Message sent: %s", info.messageId);
 
   //  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
