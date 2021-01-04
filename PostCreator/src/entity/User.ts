@@ -1,5 +1,3 @@
-import "reflect-metadata";
-
 import {
   BaseEntity,
   Column,
