@@ -11,7 +11,7 @@ import { ContextResponse } from "../@types/ContextResponse";
 import { CreatePostsArgs } from "../@types/CreatePostsArgs";
 import "reflect-metadata";
 import { Post } from "../entity/Post";
-import { isAuth } from "../mutations/isAuth";
+import { isAuth } from "../middlewares/isAuth";
 import { MyContext } from "../@types/MyContext";
 import session from "express-session";
 @Resolver()
