@@ -10,7 +10,6 @@ import { ContextResponse } from "./@types/ContextResponse";
 import Redis from "ioredis";
 import session from "express-session";
 let RedisStore = require("connect-redis")(session);
-
 (async () => {
   const PORT = process.env.PORT || 5000;
   const redis = new Redis();
@@ -42,6 +41,6 @@ let RedisStore = require("connect-redis")(session);
     );
   });
   app.listen(PORT, () => {
-    console.log(`http://loclahost/${PORT}`);
+    console.log(`http://localhost:${PORT}`);
   });
 })();

@@ -1,12 +1,30 @@
-import { Arg, Ctx, Field, Mutation, Query, Resolver } from "type-graphql";
+import {
+  Arg,
+  Ctx,
+  Field,
+  Mutation,
+  UseMiddleware,
+  Query,
+  Resolver,
+} from "type-graphql";
 import { ContextResponse } from "../@types/ContextResponse";
 import { CreatePostsArgs } from "../@types/CreatePostsArgs";
 import "reflect-metadata";
 import { Post } from "../entity/Post";
+import { isAuth } from "../mutations/isAuth";
+import { MyContext } from "../@types/MyContext";
+import session from "express-session";
 @Resolver()
 export class PostResolver {
-  @Query(() => [Post])
-  posts(@Ctx() { req, res }: ContextResponse): Promise<Post[]> {
+  @Query(() => String)
+  @UseMiddleware(isAuth)
+  async Me(@Ctx() { payload }: MyContext) {
+    return `Your user id : ${payload!.userId}`;
+  }
+
+  @Query(() => [Post], { nullable: true })
+  @UseMiddleware(isAuth)
+  posts(@Ctx() { payload, req }: MyContext): Promise<Post[] | null> {
     const posts = Post.find({ where: { userId: req.session.userId } });
     return posts;
   }
@@ -16,8 +34,6 @@ export class PostResolver {
     @Ctx() { req }: ContextResponse
   ): Promise<Post | boolean> {
     try {
-      console.log(req.session);
-
       const post = Post.create({
         title: options.title,
         image: options.image,

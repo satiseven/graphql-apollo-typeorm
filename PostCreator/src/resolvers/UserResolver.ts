@@ -2,7 +2,7 @@ import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { User } from "../entity/User";
 import { hash, verify } from "argon2";
 import { UserResponse } from "../@types/userResponse";
-import { RegisterArgs } from "./args/RegisterArgs";
+import { RegisterArgs } from "../@types/RegisterArgs";
 import { ContextResponse } from "../@types/ContextResponse";
 @Resolver()
 export class UserResolver {
