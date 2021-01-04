@@ -13,6 +13,9 @@ import "reflect-metadata";
 import { Post } from "../entity/Post";
 import { isAuth } from "../middlewares/isAuth";
 import { MyContext } from "../@types/MyContext";
+import { SendMailOptions } from "nodemailer";
+import { SendMail } from "../configuration/mail";
+import { logger } from "../helpers/logger";
 
 @Resolver()
 export class PostResolver {
@@ -41,6 +44,14 @@ export class PostResolver {
         slug: options.slug,
         userId: req.session.userId,
       }).save();
+      let mail: SendMailOptions = {
+        to: "satiseven777@gmail.com",
+        // from: '"satiseven 👻" <riza@gokcekmarket.com>',
+        subject: "Selam ✔",
+        text: "Selam Dunya",
+        html: "<h1>Yeni Bir Yazi Girildi</h1>",
+      };
+      SendMail(mail);
       return post;
     } catch (error) {
       return false;

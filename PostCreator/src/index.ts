@@ -7,10 +7,10 @@ import { createConnection } from "typeorm";
 import { UserResolver } from "./resolvers/UserResolver";
 import { PostResolver } from "./resolvers/PostResolver";
 import { ContextResponse } from "./@types/ContextResponse";
-
 import Redis from "ioredis";
 import session from "express-session";
-import { logger } from "./helpers/logger";
+import { SendMail } from "./configuration/mail";
+import { SendMailOptions } from "nodemailer";
 let RedisStore = require("connect-redis")(session);
 (async () => {
   const PORT = process.env.PORT || 5000;
@@ -21,6 +21,7 @@ let RedisStore = require("connect-redis")(session);
     schema: await buildSchema({ resolvers: [UserResolver, PostResolver] }),
     context: ({ req, res }): ContextResponse => ({ req, res }),
   });
+
   app.use(
     session({
       secret: "thisisasecretkey",
